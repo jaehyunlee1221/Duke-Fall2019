@@ -1,11 +1,11 @@
 ---
-title: "STA 601 Homework1"
-author: "Jae Hyun Lee"
-date: "8/29/2019"
+title: 'STA 601/360 Homework1'
+author: "Jae Hyun Lee, jl914"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   html_document:
-  theme: cerulean
-  highlight: tango
+    theme: cerulean
+    highlight: tango
 ---
 
 ```{r setup, message=F, warning=F, echo=F}
@@ -40,14 +40,14 @@ $$ Thus remaining $$ p(x \mid y,z) \propto f(x,z) $$
 
 ### part (b) 
 $$
-p(y \mid x,z) \propto f(y,z)
+p(y \mid x,z) \propto g(y,z)
 $$
 answer: 
 $$
 p(x,y,z) = p(y \mid x,z) \times p(x \mid z) \times p(z) \propto f(x,z)g(y,z),h(z)
 $$ Obviously $$ p(z) \propto h(z) $$ and $$p(x \mid z) = p(x \cap z) / p(x)$$ $$\rightarrow  p(x \cap z) \propto f(x,z) 
 \rightarrow p(x \mid z) \propto f(x,z) 
-$$ Thus remaining $$ p(y \mid x,z) \propto f(y,z) $$ 
+$$ Thus remaining $$ p(y \mid x,z) \propto g(y,z) $$ 
 
 ### part(c\) 
 X and Y are conditionally independent given Z
@@ -55,8 +55,8 @@ answer:
 By definition, if X and Y are independent,
 $$ p(x,y \mid z) = p(x \mid z)p(y \mid z) $$ and it implies that
 $$ p(x \mid y,z) = p(x \mid z) \;or\; p(y \mid x,z) = p(y \mid z) $$ As shown at above questions, I could find that their full conditional distribution do not depend on each other
-$$ p(x \mid y,z) \propto f(x,z) \propto f(x \mid z) $$
-$$ p(y \mid x,z) \propto g(y,z) \propto f(y \mid z) $$   
+$$ p(x \mid y,z) \propto f(x,z) \propto p(x \mid z) $$
+$$ p(y \mid x,z) \propto g(y,z) \propto p(y \mid z) $$   
 Thus I can conclude that they are conditional independent.
 
 
@@ -90,19 +90,20 @@ $$ p(A^{c} \cap B^{c} \mid C) = p((A \cup B)^{c} \mid C) \\
 = 1 - p(A \mid C) - p(B \mid C) + p(B \mid C)p(A \mid C) \\
 = [1-p(A \mid C)][1-p(B \mid C)] \\
 = p(A^{c} \mid C)p(B^{c} \mid C)$$
-\\
+
 
 ### part(b)
 
 show the example that 
 $$ A \perp B \mid C \quad hold \quad A \perp B \mid C^{c} \quad not \; hold  $$
 Let consider 2 fair dice toss and event A,B,C are as below:     
-A = first dice value is 1      
-B = second dice value is 1      
-C = sum of dice is less or equal to 2     
+* A = first dice value is 1      
+* B = second dice value is 1      
+* C = sum of dice is less or equal to 2     
+
 Then we can find probability functions of A,B,C as follow:     
 $$ p(A \mid C) = 1, p(B \mid C) = 1, p(A \cap B \mid C) =1 \rightarrow A \perp B \mid C $$ and
-$$ p(A \mid C^{c}) =6/35, p(B \mid C^{c}) = 6/35, p(A \cap B \mid C^{c}) = 1/36 \\ \rightarrow A \perp B \mid C^{c} does \; not \; hold$$
+$$ p(A \mid C^{c}) =1/7, p(B \mid C^{c}) = 1/7, p(A \cap B \mid C^{c}) = 1/36 \\ \rightarrow A \perp B \mid C^{c} does \; not \; hold$$
 
 ## Exercise 3
 There are three coins in a bag; two fair coins (probability of heads = probability of tails) and one fake coin (probability of heads = 1).  
