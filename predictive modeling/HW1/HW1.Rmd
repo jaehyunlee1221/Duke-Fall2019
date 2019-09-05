@@ -27,10 +27,13 @@ data(Auto)
 ```{r exercise1}
 outlook_auto <- summary(Auto)
 any(is.na(Auto))
+outlook_auto
 ```
   
 answer : no missing data in this data set  
    
+     
+    
 2.  Which of the predictors are quantitative, and which are qualitative?
 ```{r}
 str(Auto)
@@ -42,12 +45,13 @@ answer: I can find that only name is qualitative predictor which has 304 levels 
    
 ```{r}
 library(knitr)
-range_table <- c(colnames(Auto)[1],range(Auto[,1]))
-for(i in 2:(ncol(Auto)-1)){
-  range_table <- rbind(range_table, c(colnames(Auto)[i],range(Auto[,i])))
+num_var <- ncol(Auto)-1
+range_table <- matrix(rep(0,3*num_var),nrow = num_var)
+range_table <- as.data.frame(range_table)
+for(i in 1:(ncol(Auto)-1)){
+  range_table[i,] <- c(colnames(Auto)[i],range(Auto[,i]))
 }
 colnames(range_table) <- c("variable name","min","max")
-row.names(range_table) <- 1:nrow(range_table)
 kable(range_table)
 
 ```
@@ -55,17 +59,15 @@ kable(range_table)
 4. What is the mean and standard deviation of each quantitative predictor?  _Format nicely in a table as above_
 
 ```{r}
-summary_table <- c(colnames(Auto)[1],
-                   round(mean(Auto[,1]),digits = 3),round(sd(Auto[,1]),digits = 3))
-for(i in 2:(ncol(Auto)-1)){
-  summary_table <- rbind(summary_table,
-                         c(colnames(Auto)[i],
-                           round(mean(Auto[,i]),digits = 3),
-                           round(sd(Auto[,i]),digits = 3)))
+num_var <- ncol(Auto)-1
+mv_table <- matrix(rep(0,3*num_var),nrow = num_var)
+mv_table <- as.data.frame(mv_table)
+for(i in 1:num_var){
+  mv_table[i,] <- c(colnames(Auto)[i],
+                   round(mean(Auto[,i]),digits = 3),round(sd(Auto[,i]),digits = 3))
 }
-colnames(summary_table) <- c("variable name","mean","standard deviation")
-row.names(summary_table) <- 1:nrow(summary_table)
-kable(summary_table)
+colnames(mv_table) <- c("variable name","mean","standard deviation")
+kable(mv_table)
 ```
    
    
@@ -77,12 +79,13 @@ library(GGally)
 all_gp <- ggpairs(Auto, columns = c(1:8))
 all_gp <- all_gp + 
   labs(title = "Relatioship between all quantative predictors",
-       caption = "There is strong positive relationship between horsepower and weight")
+       caption = "There is strong positive relationship between horsepower and weight,displacement,cylinder")
+all_gp
   
-hlgt_gp <- ggpairs(Auto, columns = c(4:5))
+hlgt_gp <- ggpairs(Auto, columns = c(2:5))
 hlgt_gp <- hlgt_gp +
-  labs(title = "Relatioship between horsepower and weight",
-       caption = "There is observation which is suspected to be influential point at rightdown side")
+  labs(title = "Relatioship between horsepower and engine size related variables",
+       caption = "They have strong and positive relationship each other")
 hlgt_gp  
 ```
 
@@ -137,6 +140,7 @@ ggplot(data = Auto, mapping = aes(x=horsepower,y=mpg)) +
 9. Use the `plot()` function to produce diagnostic plots of the least squares regression fit. Comment on any problems you see with the model regarding assumptions for using a simple linear regression.  
 
 ```{r}
+par(mfrow=c(2,2))
 plot(lm_mgp)
 ```
 
@@ -154,19 +158,33 @@ optimal predictor of $Y$ given $X = x$ using squared error loss:  that is $f(x)$
 minimizes $E[(Y - g(x))^2 \mid X =x]$ over all functions $g(x)$ at all points $X=x$.   _Hint:  there are at least two ways to do this.   Differentiation (so think about how to justify) - or - add and subtract the proposed optimal predictor and who that it must minimize the function._
 
 answer: There are two ways to show above results. First,
-$$ (Y - g(x))^{2} = (Y  - f(x) + f(x) - g(x))^{2} \\
-= (Y-f(x))^{2} + (f(x) - g(x))^{2} + 2(Y-f(x))(f(x)-g(x)) \\ $$
+$$
+\begin{aligned}
+(Y - g(x))^{2} &= (Y  - f(x) + f(x) - g(x))^{2} \\
+&= (Y-f(x))^{2} + (f(x) - g(x))^{2} + 2(Y-f(x))(f(x)-g(x)) \\ 
+\end{aligned}
+$$
 Then 
-$$ E(Y-g(x))^{2} \mid X=x) = E[(Y-f(x))^{2} \mid X] \\ +
- E[(f(x)-g(x))^{2} \mid X=x] + 2(f(x)-g(x))E[(Y-f(x)] $$
+$$
+\begin{aligned}
+E(Y-g(x))^{2} \mid X=x) = E[(Y-f(x))^{2} \mid X] \\ +
+E[(f(x)-g(x))^{2} \mid X] + 2(f(x)-g(x))E[(Y-f(x)]
+\end{aligned}
+$$
  Last term of above equation is 0 because $f(x) = E(Y \mid X)$ and first term is $var(Y \mid X)$. Furthermore, second term is non-negative because it is quadratic form and it has minimum value when $g(x) = f(x)$. Consequently, $f(x)$ is optimal predictor.  
 
 Second, 
-$$ E[Y^{2} + 2Yg(x) + g(x)^{2}] = E(Y^{2}) - 2f(x)g(x) + g(x)^{2} \\
-= var(Y \mid X) + f(x)^{2} -2f(x)g(x) + g(x)^{2}$$
+$$
+\begin{aligned}
+E[Y^{2} + 2Yg(x) + g(x)^{2}] &= E(Y^{2}) - 2f(x)g(x) + g(x)^{2} \\
+&= var(Y \mid X) + f(x)^{2} -2f(x)g(x) + g(x)^{2}
+\end{aligned}
+$$
 To find minimize above equation, I take derivative regard to $g(x)$
-$$ {d \over dg(x)} (var(Y \mid X) + f(x)^{2} -2f(x)g(x) + g(x)^{2}) \\
-= -2f(x) + 2g(x). $$
+$$
+{d \over dg(x)} (var(Y \mid X) + f(x)^{2} -2f(x)g(x) + g(x)^{2}) \\
+= -2f(x) + 2g(x). 
+$$
 Thus when $g(x) = f(x)$ has minimum.
 
 11. (adopted from ELS Ex 2.6 ) Suppose that we have a sample of $N$ pairs $x_i, y_i$ drwan iid from the distribution characterized as follows 
@@ -189,15 +207,20 @@ into a squared bias and a variance component. (See ELS 2.6(c))
 
 answer: 
 
-(a) $E(Y \mid X=x_{0})$ = $E(f(x_{0} + \varepsilon \mid X=x_{0})$
-										 =$f(x_{0})$  
+(a) $$
+    E(Y \mid X=x_{0}) = E(f(x_{0} + \varepsilon \mid X=x_{0}) =f(x_{0})
+		$$  
 										 
-(b) $var(Y \mid X=x_{0})$ = $var(f(x_{0})) + \sigma^{2}$  
+(b) $$var(Y \mid X=x_{0}) = var(f(x_{0})) + \sigma^{2}$$  
   
-(c) Let $E(\hat{f}(x_{0})) = m$, Then
-$$ (Y - \hat{f}(x_{0}))^{2} = (f(x) + \varepsilon - \hat{f}(x_{0}))^{2} \\
-= (f(x) + \varepsilon -m +m - \hat{f}(x_{0}))^{2} \\
-= (\hat{f}(x_{0}) - m)^{2} + (f(x) -m)^{2} + \varepsilon^{2} +Crossproduct
+(c) Let $E(\hat{f}(x_{0})) = m$, 
+Then
+$$
+\begin{aligned}
+(Y - \hat{f}(x_{0}))^{2} &= (f(x) + \varepsilon - \hat{f}(x_{0}))^{2} \\
+&= (f(x) + \varepsilon -m +m - \hat{f}(x_{0}))^{2} \\
+&= (\hat{f}(x_{0}) - m)^{2} + (f(x) -m)^{2} + \varepsilon^{2} +Crossproduct
+\end{aligned}
 $$
 where expectation of crossproduct is 0
 Thus expectation of equation is
@@ -208,9 +231,14 @@ $\sigma^{2}$ is variance of $\varepsilon$.
 
 (d) If $\hat{f}(x)$ is consistent estimator for $f(x)$ then as $n \to \infty$, bias and variance of estimator will be reduced into 0. But variance of $\varepsilon$ is not reduced.
 
-(e) Like (c\), let $E(\hat{f}(x_{0})$ be $m$. Then,
-$$ E[(f(x_{0})-\hat{f}(x_{0})^{2}] = E[(f(x_{0}) - m + m - \hat{f}(x_{0})^{2}] \\ $$ 
+(e) Like (c\), let $E(\hat{f}(x_{0})$ be $m$.   
+Then,   
 $$
-= E[(f(x_{0}) - m)^{2}] + E[(\hat{f}(x_{0})-m)^{2}] + (f(x_{0})-m)E[(\hat{f}(x_{0})-m)] \\ = var(\hat{f}(x_{0})) + Bias(\hat{f}(x_{0}))^{2}$$
+\begin{aligned}
+E[(f(x_{0})-\hat{f}(x_{0})^{2}] &= E[(f(x_{0}) - m + m - \hat{f}(x_{0})^{2}] \\ 
+&= E[(f(x_{0}) - m)^{2}] + E[(\hat{f}(x_{0})-m)^{2}] + (f(x_{0})-m)E[(\hat{f}(x_{0})-m)] \\ 
+&= var(\hat{f}(x_{0})) + Bias(\hat{f}(x_{0}))^{2}
+\end{aligned}
+$$
 
 (f) If MSE is fixed, then variance and bias of estimator is trade-off relationship.
