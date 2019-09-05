@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.8.31)  1 SEP 2019 19:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.8.31)  2 SEP 2019 20:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -708,160 +708,134 @@ File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 150.
-LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 186
+[1
+
+{c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]
+LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 219
 .
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Overfull \hbox (97.24333pt too wide) in paragraph at lines 186--186
+Overfull \hbox (97.24333pt too wide) in paragraph at lines 219--219
 []\T1/lmtt/m/n/10 ##  $ name        : Factor w/ 304 levels "amc ambassador brou
 gham",..: 49 36 231 14 161 141 54 223 241 2 ...[] 
  []
 
-[1
-
-{c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pd
-ftex.map}] [2]
-<HW1_files/figure-latex/unnamed-chunk-4-1.pdf, id=40, 469.755pt x 325.215pt>
+[2]
+<HW1_files/figure-latex/unnamed-chunk-4-1.pdf, id=38, 469.755pt x 325.215pt>
 File: HW1_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
 <use HW1_files/figure-latex/unnamed-chunk-4-1.pdf>
 Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-4-1.pdf  used on 
-input line 315.
+input line 343.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<HW1_files/figure-latex/unnamed-chunk-5-1.pdf, id=41, 469.755pt x 325.215pt>
+[3]
+<HW1_files/figure-latex/unnamed-chunk-4-2.pdf, id=45, 469.755pt x 325.215pt>
+File: HW1_files/figure-latex/unnamed-chunk-4-2.pdf Graphic file (type pdf)
+<use HW1_files/figure-latex/unnamed-chunk-4-2.pdf>
+Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-4-2.pdf  used on 
+input line 355.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+[4 <./HW1_files/figure-latex/unnamed-chunk-4-1.pdf>]
+<HW1_files/figure-latex/unnamed-chunk-5-1.pdf, id=55, 469.755pt x 325.215pt>
 File: HW1_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 <use HW1_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-5-1.pdf  used on 
-input line 338.
+input line 378.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[3 <./HW1_files/figure-latex/unnamed-chunk-4-1.pdf>] [4 <./HW1_files/figure-lat
+[5 <./HW1_files/figure-latex/unnamed-chunk-4-2.pdf>] [6 <./HW1_files/figure-lat
 ex/unnamed-chunk-5-1.pdf>]
-<HW1_files/figure-latex/unnamed-chunk-7-1.pdf, id=67, 469.755pt x 325.215pt>
+<HW1_files/figure-latex/unnamed-chunk-7-1.pdf, id=81, 469.755pt x 325.215pt>
 File: HW1_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use HW1_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-7-1.pdf  used on 
-input line 453.
+input line 493.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[5]
-<HW1_files/figure-latex/unnamed-chunk-8-1.pdf, id=77, 469.755pt x 325.215pt>
+[7]
+<HW1_files/figure-latex/unnamed-chunk-8-1.pdf, id=92, 469.755pt x 325.215pt>
 File: HW1_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use HW1_files/figure-latex/unnamed-chunk-8-1.pdf>
 Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-8-1.pdf  used on 
-input line 471.
+input line 512.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<HW1_files/figure-latex/unnamed-chunk-8-2.pdf, id=78, 469.755pt x 325.215pt>
-File: HW1_files/figure-latex/unnamed-chunk-8-2.pdf Graphic file (type pdf)
-<use HW1_files/figure-latex/unnamed-chunk-8-2.pdf>
-Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-8-2.pdf  used on 
-input line 472.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<HW1_files/figure-latex/unnamed-chunk-8-3.pdf, id=79, 469.755pt x 325.215pt>
-File: HW1_files/figure-latex/unnamed-chunk-8-3.pdf Graphic file (type pdf)
-<use HW1_files/figure-latex/unnamed-chunk-8-3.pdf>
-Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-8-3.pdf  used on 
-input line 473.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<HW1_files/figure-latex/unnamed-chunk-8-4.pdf, id=80, 469.755pt x 325.215pt>
-File: HW1_files/figure-latex/unnamed-chunk-8-4.pdf Graphic file (type pdf)
-<use HW1_files/figure-latex/unnamed-chunk-8-4.pdf>
-Package pdftex.def Info: HW1_files/figure-latex/unnamed-chunk-8-4.pdf  used on 
-input line 474.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 471--475
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 471--475
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 471--475
-[]
- []
-
-[6 <./HW1_files/figure-latex/unnamed-chunk-7-1.pdf>] [7 <./HW1_files/figure-lat
-ex/unnamed-chunk-8-1.pdf>] [8 <./HW1_files/figure-latex/unnamed-chunk-8-2.pdf>]
-[9 <./HW1_files/figure-latex/unnamed-chunk-8-3.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 480--483
+[8 <./HW1_files/figure-latex/unnamed-chunk-7-1.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 518--521
 
  []
 
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 494.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 532.
 
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 494.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 532.
 
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 494
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 532
 .
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 494
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 532
 .
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 494.
+(Font)              <10> on input line 532.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 494.
+(Font)              <7> on input line 532.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 494.
-LaTeX Font Info:    Try loading font information for U+msa on input line 494.
+(Font)              <5> on input line 532.
+LaTeX Font Info:    Try loading font information for U+msa on input line 532.
 
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.f
 d
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 494.
+LaTeX Font Info:    Try loading font information for U+msb on input line 532.
 
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.f
 d
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [10 <./HW1_files/figure-latex/unnamed-chunk-8-4.pdf>]
+) [9 <./HW1_files/figure-latex/unnamed-chunk-8-1.pdf>]
 
 Package amsmath Warning: Foreign command \over;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 525.
+(amsmath)                 on input line 563.
 
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 554.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 592.
 
 (c:/Users/MangoLee/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Underfull \hbox (badness 10000) in paragraph at lines 558--562
+Underfull \hbox (badness 10000) in paragraph at lines 596--600
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 598--601
+Underfull \hbox (badness 10000) in paragraph at lines 636--638
 
  []
 
+[10]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 651.
 [11]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 614.
-[12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 614.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 651.
 (./HW1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 614.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 614.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 651.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 651.
 Package rerunfilecheck Info: File `HW1.out' has not changed.
 (rerunfilecheck)             Checksum: A8FE23174DDE212EC805CE3BA4AFA710;419.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 614.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 651.
  ) 
 Here is how much of TeX's memory you used:
- 10940 strings out of 494553
- 158248 string characters out of 6175770
- 227504 words of memory out of 5000000
- 14406 multiletter control sequences out of 15000+600000
+ 10931 strings out of 494553
+ 157795 string characters out of 6175770
+ 227503 words of memory out of 5000000
+ 14398 multiletter control sequences out of 15000+600000
  60948 words of font info for 47 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  28i,10n,32p,345b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -888,10 +862,10 @@ nyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/MangoLee/AppData/Ro
 aming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/MangoLee/App
 Data/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb><c:/Users/Mang
 oLee/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on HW1.pdf (12 pages, 483671 bytes).
+Output written on HW1.pdf (11 pages, 950945 bytes).
 PDF statistics:
- 232 PDF objects out of 1000 (max. 8388607)
- 187 compressed objects within 2 object streams
- 52 named destinations out of 1000 (max. 500000)
- 60 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 216 PDF objects out of 1000 (max. 8388607)
+ 176 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 50 words of extra memory for PDF output out of 10000 (max. 10000000)
 
