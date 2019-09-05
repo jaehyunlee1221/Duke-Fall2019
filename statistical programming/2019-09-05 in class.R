@@ -11,3 +11,24 @@ airport <- c("RDU","ABE","DTW","GRR","GNV","JFK","SFO")
 attr(x=z, which = "Levels") <- airport
 attr(x=z, which = "Class") <- "factor"
 attributes(z)
+
+#Exercis3
+x <- letters[1:5]
+y <- list(i=1:5,j=-3:3,k=rep(0,4))
+x[[1]]
+x[1]
+y[[1]]
+y[1]
+x[-1]
+y[2]
+y[-2]
+y[[2]][-1]
+y[[2]][x<0]
+str(y)
+y[2]
+y[[2]][y$j<0]
+typeof(x)
+x["a"]
+
+y[[c(1,3)]]
+y[[c(2,4)]]
