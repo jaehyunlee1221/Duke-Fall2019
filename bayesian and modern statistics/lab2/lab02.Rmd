@@ -42,7 +42,7 @@ plot(seq(0, 1, length.out = 1000),
 
 ```{r pooled}
 stan_dat <- list(n = n, N = N, y =y, a = 1, b = 1)
-fit_pool <- stan('lab2_pool.stan', data = stan_dat, chains = 2, refresh = 0)
+fit_pool <- stan('lab2_pool.stan', data = stan_dat, chains = 2, refresh = 0)#sampling
 pool_output <- rstan::extract(fit_pool)
 mean(pool_output$theta)
 ```
@@ -51,6 +51,12 @@ mean(pool_output$theta)
 ### Exercise
 
 Plot a histogram of $\theta$ from the `rstan` object called `pool_output`
+```{r}
+boxplot(pool_output$theta)
+ggplot(mapping=aes(pool_output$theta)) +
+  geom_histogram()
+str(pool_output)
+```
 
 ***
 
@@ -69,6 +75,11 @@ apply(nopool_output$theta,2,mean)
 Visualize the posterior distributions of the $\theta_i$ with boxplots. In the plot, there should be one box and whiskers object for each $\theta_i$. 
 
 What is actually being plotted here? What does each point represent?
+
+```{r}
+summary(nopool_output)
+boxplot(nopool_output$theta)
+```
 
 ***
 
