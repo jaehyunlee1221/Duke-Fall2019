@@ -16,6 +16,18 @@ Readings: Chapters 3-4, 8-9 and Appendix in Weisberg [Applied Linear Regression]
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r package setup}
+#install.packages("alr3")
+#install.packages("car")
+#install.packages("backports")
+#install.packages("readxl")
+#install.packages("htmltools")
+#install.packages('scales')
+#install.packages("colorspace")
+#install.packages("lazyeval")
+#install.packages("yaml")
+#install.packages("stringi")
+```
 
 This exercise involves the UN data set from `alr3` package. Install `alr3` and the `car` packages and load the data to answer the following questions adding your code in the code chunks.  Please add appropriate code to the chunks to suppress messages and warnings as needed once you are sure the code is working properly and remove instructions if no longer needed. Figures should have informative captions. Please switch the output to pdf for your final version to upload to Sakai. **Remove these instructions for final submission**
 
@@ -34,14 +46,27 @@ library(car)
 
 1. Create a summary of the data.  How many variables have missing data?  Which are quantitative and which are qualtitative?
 
-```{r}
-
+```{r Q1}
+str(UN3)
+smry_un3 <- summary(UN3)
+na_count <- smry_un3[7,]
+na_count
 ```
+answer: As we can see in outlook of data.frame UN3, there are all quantative variables. Except for variable named Purban, those of variables including ModernC,Change,PPgdp,Frate,Pop,Fertility have at least one missing data. 
 
 2. What is the mean and standard deviation of each quantitative predictor?  Provide in a nicely formatted table.
 
-```{r}
-
+```{r Q2}
+library(knitr)
+mn_st_table <- matrix(rep(0,3*length(UN3)),nrow = length(UN3))
+for(i in 1:length(UN3)){
+  mn_st_table[i,] <- c(colnames(UN3)[i],
+                       round(mean(UN3[,i],na.rm = T),3),
+                       round(sd(UN3[,i],na.rm=T),3))
+}
+rownames(mn_st_table) <- 1:length(UN3)
+colnames(mn_st_table) <- c("variable","mean","stand deviation")
+kable(mn_st_table)
 ```
 
 
@@ -50,7 +75,16 @@ highlighting the relationships among the predictors. Comment
 on your findings regarding trying to predict `ModernC` from the other variables.  Are there potential outliers, nonlinear relationships or transformations that appear to be needed based on your graphical EDA?
 
 ```{r}
-
+library(ggplot2)
+par(mfrow=c(3,3))
+pred_plot <- list()
+for(i in 1:length(UN3)){
+  pred_plot[i] <- ggplot(data=UN3, mapping = aes(x=1:nrow(UN3),y=UN3[,i]))+
+             geom_point()+
+             geom_hline(yintercept = mean(UN3[,i],na.rm = T),color="red")+
+             ylab(colnames(UN3)[i]) + xlab("index")
+}
+plot(pred_plot)
 ```
 
 ## Model Fitting

@@ -87,7 +87,7 @@ ggplot(mapping = aes(x=theta,y=posterior)) +
 
 
 ```{r d part}
-theta2 <- runif(10000)
+theta2 <- runif(10000,0,1)
 prob2 <- dbinom(57,100,theta2)
 ggplot(mapping = aes(x=theta2,y=prob2)) +
   geom_point() +
@@ -97,10 +97,10 @@ ggplot(mapping = aes(x=theta2,y=prob2)) +
 #### e) The posterior distribution of $\theta$ is beta(1+57,1+100-57). Plot the posterior density as a function of $\theta$. Discuss the relationship among all of the plots you have made for this exercise.
 
 ```{r e part}
-theta3 <- runif(10000)
+theta3 <- runif(10000,0,1)
 post_theta <- dbeta(theta3,58,44)
 ggplot(mapping = aes(x=theta3,y=post_theta)) +
-  geom_line() +
+  geom_point() +
   labs(title = "posterior density function of theta") +
   xlab("theta") + ylab("probability")
 ```
@@ -117,8 +117,15 @@ Thus, posterior distribution of $\theta$ is $beta(a+57,b+43)$
 theta_0 <- seq(0.1,0.9,0.1)
 n_0 <- c(1,2,8,16,32)
 a <- theta_0 %*% t(n_0)
+rownames(a) <- theta_0
+colnames(a) <- n_0
 b <- (1-theta_0) %*% t(n_0)
-result3 <- pbeta(0.5,a,b,lower.tail = F)
-contour(result3)
+rownames(b) <- theta_0
+colnames(b) <- n_0
+result3 <- pbeta(0.5,a+57,b+43,lower.tail = F)
+rownames(result3) <- theta_0
+colnames(result3) <- n_0
+result3
+contour(x=theta_0,y=n_0,z=result3)
 ```
 
