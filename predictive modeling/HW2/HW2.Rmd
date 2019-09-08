@@ -1,6 +1,6 @@
 ---
 title: "HW2 STA521"
-author: '[Your Name Here, netid and github username here]'
+author: '[Jae Hyun Lee, jl914, jaehyunlee1221]'
 date: "Due September 12, 2019 10am"
 output:
   pdf_document: default
@@ -14,19 +14,7 @@ Readings: Chapters 3-4, 8-9 and Appendix in Weisberg [Applied Linear Regression]
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-```{r package setup}
-#install.packages("alr3")
-#install.packages("car")
-#install.packages("backports")
-#install.packages("readxl")
-#install.packages("htmltools")
-#install.packages('scales')
-#install.packages("colorspace")
-#install.packages("lazyeval")
-#install.packages("yaml")
-#install.packages("stringi")
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE)
 ```
 
 This exercise involves the UN data set from `alr3` package. Install `alr3` and the `car` packages and load the data to answer the following questions adding your code in the code chunks.  Please add appropriate code to the chunks to suppress messages and warnings as needed once you are sure the code is working properly and remove instructions if no longer needed. Figures should have informative captions. Please switch the output to pdf for your final version to upload to Sakai. **Remove these instructions for final submission**
@@ -39,7 +27,7 @@ This exercise involves the UN data set from `alr3` package. Install `alr3` and t
 ```{r data}
 library(alr3)
 data(UN3, package="alr3")
-help(UN3) 
+#help(UN3) 
 library(car)
 ```
 
@@ -52,7 +40,7 @@ smry_un3 <- summary(UN3)
 na_count <- smry_un3[7,]
 na_count
 ```
-answer: As we can see in outlook of data.frame UN3, there are all quantative variables. Except for variable named Purban, those of variables including ModernC,Change,PPgdp,Frate,Pop,Fertility have at least one missing data. 
+answer: As we can see in outlook of data.frame UN3, there are all quantative variables. Except for variable named Purban, those of variables including ModernC, Change, PPgdp, Frate, Pop, Fertility have at least one missing data. 
 
 2. What is the mean and standard deviation of each quantitative predictor?  Provide in a nicely formatted table.
 
@@ -74,45 +62,82 @@ kable(mn_st_table)
 highlighting the relationships among the predictors. Comment
 on your findings regarding trying to predict `ModernC` from the other variables.  Are there potential outliers, nonlinear relationships or transformations that appear to be needed based on your graphical EDA?
 
-```{r}
+```{r Q3, fig.width=3.0 ,fig.height=2.25}
 library(ggplot2)
-par(mfrow=c(3,3))
-pred_plot <- list()
 for(i in 1:length(UN3)){
-  pred_plot[i] <- ggplot(data=UN3, mapping = aes(x=1:nrow(UN3),y=UN3[,i]))+
-             geom_point()+
-             geom_hline(yintercept = mean(UN3[,i],na.rm = T),color="red")+
-             ylab(colnames(UN3)[i]) + xlab("index")
+  print(ggplot(data=UN3, mapping=aes(x=1:nrow(UN3),y=UN3[,i]))+
+         geom_point()+
+         geom_hline(yintercept = mean(UN3[,i],na.rm = T),color="red")+
+         ylab(colnames(UN3)[i]) + xlab("index"))
 }
-plot(pred_plot)
 ```
+
+When we inspect scatterplots of predictors, most of them are distributed randomly from their mean. In case of PPgdp, they are skewed right. Thus I think it needs to be transformed. Furthemore, Pop seems to have some potential outliers. Therefore, we should be cautious dealing with Pop variable.
+
+
+```{r Q3_2, fig.width=4.8,fig.height=3.6}
+library(GGally)
+ggpairs(UN3) +
+  labs(title = "pairwise relationship of predictor",
+       caption = "ModernC has relationships with change,PPgdp,Fertility,Purban")
+ggpairs(UN3[,c(1,2,3,6,7)]) + 
+  labs(title = "ModernC's relationship with others",
+       caption = "ModernC has strong association with these variables")
+```
+
+
+When I see pairwise plot among predictor variables, I can find that ModernC has quite strong relationship with variables named change,PPgdp,Fertility,Purban. Three of them have linear relationship with ModernC. But PPgdp seems to have non-linear relationship with ModernC. I think this phenomenom stem from skewness of PPgdp. Thus I should recheck after taking transformation on PPgdp. 
+
 
 ## Model Fitting
 
 4.  Use the `lm()` function to perform a multiple linear regression with `ModernC` as the response and all other variables as the predictors, using the formula `ModernC ~ .`, where the `.` includes all remaining variables in the dataframe.  Create  diagnostic residual plot from the linear model object and comment on results regarding assumptions.  How many observations are used in your model fitting?
 
 ```{r}
-
+Fm <- lm(ModernC~.,data = UN3)
+par(mfrow=c(2,2))
+plot(Fm)
+summary(Fm)
 ```
+When it comes to residual vs fitted value plot, there isn't any violation sign such as non-linear relationship between them. However, although it it not severe, I can find out normality assumption is violated at margin of normal q-qplot. In scale-location plot, they are randomly distributed forming straight band. Thus there is no evidence that homongenuity assumption is violated. But in leverage vs residual plot, there are some potential influencial point. Therefore we should pay attention to those observation. In model fitting, 118 observations are used and 85 observations omitted because of their missingness.
+
 
 5. Examine added variable plots `car::avPlot` or `car::avPlots`  for your model above. Are there any plots that suggest that transformations are needed for any of the terms in the model? Describe. Is it likely that any of the localities are influential for any of the terms?  Which localities?  Which terms?  
 
 ```{r}
-
+library(car)
+avPlots(Fm)
 ```
+
+Among these variables, it is the one, Pop, which need to be transformed. Because there are some potential influential point. As mentioned, Pop has potential influential point, China and India. 
 
 6.  Using the multivariate BoxCox `car::powerTransform` or  Box-Tidwell  `car::boxTidwell` find appropriate transformations of the predictor variables  to be used as predictors in the linear model.  If any predictors are negative, you may need to transform so that they are non-negative.  Describe your method and  the resulting transformations.
 
 
 ```{r}
+library(dplyr)
+summary(UN3)
+UN <-UN3 %>%
+      mutate(Change_add = Change+1.2) %>%
+      select(ModernC,Change_add,PPgdp,Frate,Pop,Fertility,Purban)
+summary(UN)
+powerTransform(UN,family="bcPower")
 
+UN2 <- UN %>%
+  mutate(logPPgdp = log(PPgdp),
+         logPop = log(Pop),
+         logFertility = log(Fertility))  %>%
+  select(ModernC,Change_add,logPPgdp,Frate,logPop,logFertility,Purban)
 ```
+Checking summary of UN3, I can find out that Chnage variable has minimum negative value -1.1. Thus I decide to add 1.2 on Change. 
+Since ModernC,Frate, Purban, Change_add have optimal value for lamda which is approximately 1, they don't need to be transformed. However, in the case of Pop, PPgdp, and Fertility, they have optimal value for lamda which is approximately 0. Thus they are required to be log transformed.
 
 7. Given the selected transformations of the predictors, select a transformation of the response using `MASS::boxcox` or `car::boxCox` and justify.  Do you need to do this if you used `car::powerTransform` above?  Explain.
 
 
 ```{r}
-
+library(MASS)
+boxcox(lm(ModernC~.,data=UN2))
 ```
 
 8.  Fit the regression using the transformed variables.  Provide residual plots and added variables plots and comment.  If you feel that you need additional transformations of either the response or predictors, repeat any steps until you feel satisfied.

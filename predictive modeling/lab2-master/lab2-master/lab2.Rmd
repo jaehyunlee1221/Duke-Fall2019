@@ -119,6 +119,7 @@ simdat = data.frame(X1=x1, X2 = x2, Y=exp(logy))
 library(car)
 mod1 = lm(Y ~ X1 + X2, data=simdat)
 avPlots(mod1)
+termplot(mod1,partial.resid = T)
 ```
 
 In the added variable plot,
@@ -156,7 +157,7 @@ car::powerTransform(Prestige[, 1:5], family="bcnPower")
 ```
 
 
-## Termplot output
+## Termplot output - specific predictor vs partial residual(not explained by other predictor terms)
 ```{r}
 termplot(lm(Y ~ X1 + X2, data=simdat), terms = "X1",
          partial.resid = T, se=T, rug=T,
