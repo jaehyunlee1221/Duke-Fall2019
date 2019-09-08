@@ -8,16 +8,10 @@ output:
     df_print: paged
 ---
 
-## Background Reading
-
-Readings: Chapters 3-4, 8-9 and Appendix in Weisberg [Applied Linear Regression](https://ebookcentral.proquest.com/lib/duke/reader.action?docID=1574352)  
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
-
-This exercise involves the UN data set from `alr3` package. Install `alr3` and the `car` packages and load the data to answer the following questions adding your code in the code chunks.  Please add appropriate code to the chunks to suppress messages and warnings as needed once you are sure the code is working properly and remove instructions if no longer needed. Figures should have informative captions. Please switch the output to pdf for your final version to upload to Sakai. **Remove these instructions for final submission**
 
 
 ## Exploratory Data Analysis
@@ -109,7 +103,7 @@ plot(Fm,
      sub.caption = "fig9. potentially influential point detected at leverage plot")
 summary(Fm)
 ```
-When it comes to residual vs fitted value plot, there isn't any violation sign such as non-linear relationship between them. However, although it it not severe, I can find out normality assumption is violated at margin of normal q-qplot. In scale-location plot, they are randomly distributed forming straight band. Thus there is no evidence that homongenuity assumption is violated. But in leverage vs residual plot, there are some potential influencial point. Therefore we should pay attention to those observation. In model fitting, 125 observations are used and 85 observations omitted because of their missingness.
+When it comes to residual vs fitted value plot, there isn't any violation sign such as non-linear relationship between them. However, although it it not severe, I can find out normality assumption is violated at margin of normal q-qplot. In scale-location plot, they are randomly distributed forming straight band. Thus there is no evidence that homongenuity assumption is violated. But in leverage vs residual plot, there are some potential influencial point. Therefore we should pay attention to those observation. In model fitting, 125 observations are used and 85 observations are omitted because of their missingness.
 
 
 5. Examine added variable plots `car::avPlot` or `car::avPlots`  for your model above. Are there any plots that suggest that transformations are needed for any of the terms in the model? Describe. Is it likely that any of the localities are influential for any of the terms?  Which localities?  Which terms?  
@@ -131,17 +125,17 @@ UN <-UN3 %>%
 powerTransform(UN,family="bcPower")
 ```
 
-Checking summary of UN3, I can find out that Chnage variable has minimum negative value -1.1. Thus I decide to add 1.2 on Change. 
-Since ModernC,Frate, Purban, Change_add have optimal value for lamda which is approximately 1, they don't need to be transformed. However, in the case of Pop, PPgdp, and Fertility, they have optimal value for lamda which is approximately 0. Thus they are required to be log transformed.
+Checking summary of UN3, I can find out that Change variable has minimum negative value -1.1. Thus I decide to add 1.2 on Change. 
+Since ModernC, Frate, Purban, Change_add have optimal value for lamda which is approximately 1, they don't need to be transformed. However, in the case of Pop, PPgdp, and Fertility, they have optimal value for lamda which is approximately 0. Thus they are required to be log transformed.
 
 7. Given the selected transformations of the predictors, select a transformation of the response using `MASS::boxcox` or `car::boxCox` and justify.  Do you need to do this if you used `car::powerTransform` above?  Explain.
 
 
-```{r Q7}
+```{r Q7,fig.width=4.2, fig.height=2.7}
 boxCox(lm(ModernC~.,data=UN))
 ```
 
-As we can see at above plot, value 1 is included in 95% confidence interval of lambda which is same result from Q6. Thus we don't need to transform  However, even though we have checked through 'powerTransform' function, we should check again with boxcox function
+As we can see at above plot, value 1 is included in 95% confidence interval of lambda which is same result from Q6. Thus we don't need to transform.  However, even though we have checked through 'powerTransform' function, we should check again with boxcox function for potential disctintion between results.
 
 
 8.  Fit the regression using the transformed variables.  Provide residual plots and added variables plots and comment.  If you feel that you need additional transformations of either the response or predictors, repeat any steps until you feel satisfied.
@@ -157,7 +151,7 @@ UN2 <- UN %>%
 Cm <- lm(ModernC~.,data=UN2)
 par(mfrow=c(2,2))
 plot(Cm, 
-     sub.caption = "fig10. every plot don't show any violation of assumption")
+     sub = "fig10. every plot don't show any violation of assumption")
 
 avPlots(Cm)
 ```
@@ -172,7 +166,7 @@ pval <- 2*(1-pt(abs.ti, Cm$df -1))
 min(pval) < .05/(Cm$df + ncol(UN))
 ```
 
-When executing outlier test with Bonferonni correction, I cannot find any outliers. Even though there are some suspects for outlier, they leverage changed after taking power transform.
+When executing outlier test with Bonferonni correction, I cannot find any outliers. Even though there are some suspects for outlier, their leverage changed after taking power transform.
 
 
 ## Summary of Results
@@ -197,10 +191,11 @@ Every interpretation assumes that other predictors are remain constant.
 
 
 ```{r}
+any(cooks.distance(Cm)>1)
 summary(Cm)
 ```
 
-As we can see summary of final model, using predictors Change_add, logPPgdp, Frate, logPop, logFertility, Purban, my model explain 56% of variation in ModernC. Among 210 observations, only 125 observations are used to construct model because of their missingness. On the course of EDA, I detected some potentially influential points(China and India) at Pop variable but after taking log transformation, their influence was reduce. Although there is remaining risk to includes that observations, but It would be better to include them rather than excluding them because it can contain some important information. 
+As we can see summary of final model, using predictors Change_add, logPPgdp, Frate, logPop, logFertility, Purban, my model explain 56% of variation in ModernC. Among 210 observations, only 125 observations are used to construct model because of some observations' missingness. On the course of EDA, I detected some potentially influential points(China and India) at Pop variable but after taking log transformation, their influence was reduce. Although there is remaining risk to includes that observations, but It would be better to include them rather than excluding them because it can contain some important information. 
 
 ## Methodology
 
@@ -210,20 +205,20 @@ As we can see summary of final model, using predictors Change_add, logPPgdp, Fra
 answer: Added scatter plot draw linear relationship of model: $e_{Y}=\beta_{0}+\beta_{p}e_{x_{p}}$.
 $X^{*}$ is set of predictors except pth variable $x_{p}$
 where $e_{Y}$ is residual of fitted model on Y using $X^{*}$ and $e_{x_{p}}$ is residual of fitted model on $x_{p}$ using  $X^{*}$. 
-By simple regression estimate result, estimate for intercept is 
+By simple regression estimate result, estimate for intttercept is 
 $$
-\hat{\beta_{0}} = \bar{e_{Y}} - \hat{\beta_{p}} \bar{e_{x_{p}}}
+\hat{\beta_{0}} = \overline{e_{Y}} - \hat{\beta_{p}} \overline{e_{x_{p}}}
 $$
 and
 $$
-\bar{e_{Y}} = \sum_{i=1}^{n} e_{Y_{i}}/n = 1/n * 1_{n}^{T}(I-H^{*})Y
+\overline{e_{Y}} = \frac{\sum_{i=1}^{n} e_{Y_{i}}}{n} = \frac{1}{n} \times 1_{n}^{T}(I-H^{*})Y
 $$
 where $H^{*}=X^{*}(X^{*}X^{*})^{-1}X^{*T}$.
-But $H^{*}$ is projection matrix of X which include one's column. According to fact that if $H^*$ is the projection matrix for $X$ which contains a column of ones, then $1_{n}^{T} (I - H) = 0$ or $(I - H) 1_{n} = 0$, $\bar{e_{Y}}$ = 0
+But $H^{*}$ is projection matrix of X which include one's column. According to fact that if $H^*$ is the projection matrix for $X$ which contains a column of ones, then $1_{n}^{T} (I - H) = 0$ or $(I - H) 1_{n} = 0$, $\overline{e_{Y}}$ = 0
 $$
-\bar{e_{x_{p}}} = \sum_{i=1}^{n} e_{X_{pi}}/n = 1/n * 1_{n}^{T}(I-H^{*})x_{p}
+\overline{e_{x_{p}}} = \frac{\sum_{i=1}^{n} e_{X_{pi}}}{n} = \frac{1}{n} \times 1_{n}^{T}(I-H^{*})x_{p}
 $$
-By same logic, $\bar{e_{x_{p}}}$ = 0.
+By same logic, $\overline{e_{x_{p}}}$ = 0.
 
 Thus estimated intercept $\hat{\beta_{0}}$ = 0 for every added variable plot. 
 
