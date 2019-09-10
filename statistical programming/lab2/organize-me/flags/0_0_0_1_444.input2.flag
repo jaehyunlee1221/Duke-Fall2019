@@ -1,0 +1,59 @@
+Job Id: 47341559.mgr-04.i
+    Job_Name = S1Ntestn50
+    Job_Owner = santosha@css-039
+    resources_used.cput = 00:06:56
+    resources_used.energy_used = 0
+    resources_used.mem = 5724kb
+    resources_used.vmem = 225080kb
+    resources_used.walltime = 00:06:58
+    job_state = R
+    queue = main
+    server = mgr-04.i
+    Checkpoint = u
+    ctime = Wed Sep 13 08:00:18 2017
+    Error_Path = css-039.i:/mnt/home/santosha/main/HDCovMatTest/Testing/Settin
+	g1Normal/TestingT8/S1Ntestn50.e47341559
+    exec_host = lac-337/6
+    Hold_Types = n
+    Join_Path = oe
+    Keep_Files = n
+    Mail_Points = n
+    mtime = Wed Sep 13 09:00:40 2017
+    Output_Path = css-039.i:/mnt/home/santosha/main/HDCovMatTest/Testing/Setti
+	ng1Normal/TestingT8/S1Ntestn50.o47341559
+    Priority = 0
+    qtime = Wed Sep 13 08:00:18 2017
+    Rerunable = False
+    Resource_List.nodes = 1:ppn=1
+    Resource_List.walltime = 00:59:00
+    Resource_List.mem = 1gb
+    Resource_List.feature = gbe
+    Resource_List.nodect = 1
+    session_id = 10996
+    Variable_List = PBS_O_QUEUE=main,PBS_O_HOME=/mnt/home/santosha,
+	PBS_O_LOGNAME=santosha,
+	PBS_O_PATH=/opt/software/Stata/15.0/SE:/opt/software/R/2.15.1--GCC-4.
+	4.5/bin:/opt/software/MATLAB/R2014a/bin:/opt/software/Python/2.7.2--GC
+	C-4.4.5/bin:/opt/software/cmake/2.8.5--GCC-4.4.5/bin:/opt/software/Ope
+	nMPI/1.4.3--GCC-4.4.5/bin:/opt/moab/bin:/usr/lib64/qt-3.3/bin:/opt/sof
+	tware/lmod/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/loca
+	l/hpcc/bin:/usr/local/bin:/opt/ibutils/bin,
+	PBS_O_MAIL=/var/spool/mail/santosha,PBS_O_SHELL=/bin/bash,
+	PBS_O_LANG=en_US.UTF-8,
+	PBS_O_WORKDIR=/mnt/home/santosha/main/HDCovMatTest/Testing/Setting1No
+	rmal/TestingT8,PBS_O_HOST=css-039.i,PBS_O_SERVER=mgr-04
+    euser = santosha
+    egroup = stt
+    queue_type = E
+    etime = Wed Sep 13 08:00:18 2017
+    submit_args = mainrun_C.qsub
+    start_time = Wed Sep 13 09:00:40 2017
+    Walltime.Remaining = 3075
+    start_count = 1
+    fault_tolerant = False
+    job_radix = 0
+    submit_host = css-039.i
+    init_work_dir = /mnt/home/santosha/main/HDCovMatTest/Testing/Setting1Norma
+	l/TestingT8
+    request_version = 1
+

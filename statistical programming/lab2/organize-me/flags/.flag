@@ -1,0 +1,59 @@
+Job Id: 47177394[162].mgr-04.i
+    Job_Name = testing-162-162
+    Job_Owner = santosha@csm-012
+    resources_used.cput = 03:43:58
+    resources_used.energy_used = 0
+    resources_used.mem = 1661916kb
+    resources_used.vmem = 2123952kb
+    resources_used.walltime = 03:44:31
+    job_state = R
+    queue = main
+    server = mgr-04.i
+    Checkpoint = u
+    ctime = Wed Sep  6 01:02:46 2017
+    Error_Path = csm-012.i:/mnt/home/santosha/main/HDCovMatTest/Testing/Settin
+	g1Normal/TestingT8/testing-162.e47177394-162
+    exec_host = lac-260/26
+    Join_Path = oe
+    Keep_Files = n
+    Mail_Points = n
+    mtime = Wed Sep  6 04:52:19 2017
+    Output_Path = csm-012.i:/mnt/home/santosha/main/HDCovMatTest/Testing/Setti
+	ng1Normal/TestingT8/testing-162.o47177394-162
+    Priority = 0
+    qtime = Wed Sep  6 01:02:46 2017
+    Rerunable = False
+    Resource_List.nodes = 1:ppn=1
+    Resource_List.walltime = 04:00:00
+    Resource_List.mem = 5gb
+    Resource_List.feature = gbe
+    Resource_List.nodect = 1
+    session_id = 17390
+    Variable_List = PBS_ARRAYID=162,PBS_O_QUEUE=main,
+	PBS_O_HOME=/mnt/home/santosha,PBS_O_LOGNAME=santosha,
+	PBS_O_PATH=/opt/software/powertools/bin:/opt/software/R/3.2.0--GCC-4.
+	4.5/bin:/opt/software/Stata/15.0/SE:/opt/software/MATLAB/R2014a/bin:/o
+	pt/software/Python/2.7.2--GCC-4.4.5/bin:/opt/software/cmake/2.8.5--GCC
+	-4.4.5/bin:/opt/software/OpenMPI/1.4.3--GCC-4.4.5/bin:/opt/moab/bin:/u
+	sr/lib64/qt-3.3/bin:/opt/software/lmod/bin:/bin:/usr/bin:/usr/local/sb
+	in:/usr/sbin:/sbin:/usr/local/hpcc/bin:/usr/local/bin:/opt/ibutils/bin
+	,PBS_O_MAIL=/var/spool/mail/santosha,PBS_O_SHELL=/bin/bash,PBS_O_LANG=C,
+	PBS_O_WORKDIR=/mnt/home/santosha/main/HDCovMatTest/Testing/Setting1No
+	rmal/TestingT8,PBS_O_HOST=csm-012.i,PBS_O_SERVER=mgr-04
+    euser = santosha
+    egroup = stt
+    queue_type = E
+    etime = Wed Sep  6 01:02:46 2017
+    submit_args = -t 162 -N testing-162 /var/spool/torque/mom_priv/jobs/471748
+	24-162.mgr-04.i.SC
+    job_array_id = 162
+    start_time = Wed Sep  6 04:52:19 2017
+    Walltime.Remaining = 894
+    start_count = 1
+    fault_tolerant = False
+    job_radix = 0
+    submit_host = csm-012.i
+    init_work_dir = /mnt/home/santosha/main/HDCovMatTest/Testing/Setting1Norma
+	l/TestingT8
+    request_version = 1
+
