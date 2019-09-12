@@ -6,12 +6,12 @@ x
 attributes(x)
 
 #Exercise2
-z<- c(1,2,3,4,1,4,5,6,6,7,3)
+z<- as.integer(c(1,2,3,4,1,4,5,6,6,7,3))
 airport <- c("RDU","ABE","DTW","GRR","GNV","JFK","SFO")
-attr(x=z, which = "Levels") <- airport
-attr(x=z, which = "Class") <- "factor"
+attr(x=z, which = "levels") <- airport
+attr(x=z, which = "class") <- "factor"
+z
 attributes(z)
-
 #Exercis3
 x <- letters[1:5]
 y <- list(i=1:5,j=-3:3,k=rep(0,4))
@@ -27,11 +27,8 @@ y[[2]][x<0]
 str(y)
 y[2]
 y[[2]][y$j<0]
-<<<<<<< HEAD
 typeof(x)
 x["a"]
 
 y[[c(1,3)]]
 y[[c(2,4)]]
-=======
->>>>>>> 887295311a4120ed4fa8a38431fba2bd480b91c1

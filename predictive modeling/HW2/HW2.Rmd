@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ## Exploratory Data Analysis
 
-0.  Preliminary read in the data.  After testing, modify the code chunk so that output, messages and warnings are suppressed.  *Exclude text from final*
 
 ```{r data}
 library(alr3)
@@ -39,7 +38,7 @@ smry_UN3
 na_count <- smry_UN3[7,]
 na_count
 ```
-answer: As we can see in outlook of data.frame UN3, there are all quantative variables. Except for variable named Purban, those of variables including ModernC, Change, PPgdp, Frate, Pop, Fertility have at least one missing data. 
+As we can see in outlook of data.frame UN3, there are all quantative variables. Except for variable named Purban, those of variables including ModernC, Change, PPgdp, Frate, Pop, Fertility have at least one missing data. 
 
 2. What is the mean and standard deviation of each quantitative predictor?  Provide in a nicely formatted table.
 
@@ -173,19 +172,37 @@ When executing outlier test with Bonferonni correction, I cannot find any outlie
 
 10. For your final model, provide summaries of coefficients with 95% confidence intervals in a nice table with interpretations of each coefficient.  These should be in terms of the original units! 
 
+final model is as below,
+$$
+ModernC = \beta_0 + \beta_1Changeadd+\beta_2 logPPgdp + \beta_3 Frate + \beta_4 logPop + \beta_5 logFertility + \beta_6 Purban
+$$
 
 ```{r Q10}
 sum_Cm <- cbind(summary(Cm)$coefficient[,1],
                 confint(Cm,c('(Intercept)',colnames(UN2)[-1]),level = 0.95))
 sum_Cm <- round(sum_Cm,3)
-interpret <- c("When predictor variables are 0, ModernC has -17.879 on average","Increase in 1 unit of Change_add makes increase 2.31 unit of ModernC on average","Increase in 1 unit of PPgdp makes increase 6.44*log(1+1/PPgdp) unit of ModernC on average","Increase in 1 unit of Frate makes increase 0.17 unit of ModernC on average","Increase in 1 unit of Pop makes increase 1.59*log(1+1/Pop) unit of ModernC on average","Increase in 1 unit of Fertility makes decrease -18*log(1+1/Fertility) unit of ModernC on average","Increase in 1 unit of Purban makes decrease 0.007 unit of ModernC on average")
+interpret <- vector()
+sum_Cm[,1]<0
+for(i in 1:nrow(sum_Cm)){
+  if(i == 1){
+    interpret[i] <- "When predictor variables are 0, ModernC has -17.879 on average"
+  }else if(i %in% c(2,4,7)){
+    interpret[i] <- paste("Increase in 1 unit of",
+                          colnames(UN)[i],"makes change",
+                          sum_Cm[i,1],"unit of ModernC on average")
+  }else {
+    interpret[i] <- paste("Increase in 10% of",
+                          colnames(UN)[i],"makes change",
+                          round(1.1^sum_Cm[i,1]-1,3),"% of ModernC on average")
+  }
+}
 colnames(sum_Cm) <- c("coefficient","2.5%","97.5%")
 names(interpret) <- rownames(sum_Cm)
 kable(sum_Cm)
 kable(interpret)
 ```
 
-Every interpretation assumes that other predictors are remain constant.
+Every interpretation assumes that other predictors are remain constant. Moreover, % changes are calculated by $1.1^{\beta_i}-1$
 
 11. Provide a paragraph summarizing your final model  and findings suitable for the US envoy to the UN after adjusting for outliers or influential points. You should provide a justification for any case deletions in your final model.
 
@@ -194,8 +211,13 @@ Every interpretation assumes that other predictors are remain constant.
 any(cooks.distance(Cm)>1)
 summary(Cm)
 ```
+Final model is as below:
 
-As we can see summary of final model, using predictors Change_add, logPPgdp, Frate, logPop, logFertility, Purban, my model explain 56% of variation in ModernC. Among 210 observations, only 125 observations are used to construct model because of some observations' missingness. On the course of EDA, I detected some potentially influential points(China and India) at Pop variable but after taking log transformation, their influence was reduce. Although there is remaining risk to includes that observations, but It would be better to include them rather than excluding them because it can contain some important information. 
+$$
+ModernC = -17.88 + 2.31Changeadd + 6.44logPPgdp + 0.18 Frate + 1.6logPop  -18.23 logFertility - 0.007 Purban
+$$
+
+As we can see summary of final model, using predictors Change_add, logPPgdp, Frate, logPop, logFertility, Purban, my model explain 56% of variation in ModernC. Among 210 observations, only 125 observations are used to construct model because of some observations' missingness. On the course of EDA, I detected some potentially influential points(China and India) at Pop variable but after taking log transformation, their influence was reduce. Although there is remaining risk to includes that observations, but It would be better to include them rather than excluding them because it can contain some important information. A result of model shows some interesting discovery. We could find strong evidence that Women who have more average income or participate economical activity much tend to careful about preganancy using modern method of contraception. It might stem from social environment or their mind about pregnancy. On the other hand, understandably, as proportion of women who use modern contraception methods grows, national fertility decreases. 
 
 ## Methodology
 
