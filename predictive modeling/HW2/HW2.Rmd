@@ -88,7 +88,7 @@ ggpairs(UN3[,c(1,2,3,6,7)]) +
 ```
 
 
-When I see pairwise plot among predictor variables, I can find that ModernC has quite strong relationship with variables named change,PPgdp,Fertility,Purban. Three of them have linear relationship with ModernC. But PPgdp seems to have non-linear relationship with ModernC. I think this phenomenom stem from skewness of PPgdp. Thus I should recheck after taking transformation on PPgdp. 
+When I see pairwise plot among predictor variables, I can find that ModernC has quite strong relationship with variables named change,PPgdp,Fertility,Purban.Three of them have linear relationship with ModernC. But PPgdp seems to have non-linear relationship with ModernC. I think this phenomenom stem from skewness of PPgdp. Thus I should recheck after taking transformation on PPgdp. And I also find that there are potential influential point at correlation plot between Pop and ModernC.
 
 
 ## Model Fitting
@@ -102,7 +102,7 @@ plot(Fm,
      sub.caption = "fig9. potentially influential point detected at leverage plot")
 summary(Fm)
 ```
-When it comes to residual vs fitted value plot, there isn't any violation sign such as non-linear relationship between them. However, although it it not severe, I can find out normality assumption is violated at margin of normal q-qplot. In scale-location plot, they are randomly distributed forming straight band. Thus there is no evidence that homongenuity assumption is violated. But in leverage vs residual plot, there are some potential influencial point. Therefore we should pay attention to those observation. In model fitting, 125 observations are used and 85 observations are omitted because of their missingness.
+When it comes to residual vs fitted value plot, there isn't any violation sign such as non-linear relationship between them. However, although it it not severe, I can find out normality assumption is violated at margin of normal q-qplot. In scale-location plot, they are forming fan shape distribution which indicate heterogenuity in variance. But degree of heterogeuity seems not to be severe. Thus there is no strong evidence that homongenuity assumption is violated. But in leverage vs residual plot, there are some potential influencial point. Therefore we should pay attention to those observation. In model fitting, 125 observations are used and 85 observations are omitted because of their missingness.
 
 
 5. Examine added variable plots `car::avPlot` or `car::avPlots`  for your model above. Are there any plots that suggest that transformations are needed for any of the terms in the model? Describe. Is it likely that any of the localities are influential for any of the terms?  Which localities?  Which terms?  
@@ -135,7 +135,12 @@ boxCox(lm(ModernC~.,data=UN))
 ```
 
 As we can see at above plot, value 1 is included in 95% confidence interval of lambda which is same result from Q6. Thus we don't need to transform.  However, even though we have checked through 'powerTransform' function, we should check again with boxcox function for potential disctintion between results.
-
+```{r Q7_2,fig.width=4.2, fig.height=2.7}
+boxCox(lm(PPgdp~.,data=UN))
+boxCox(lm(Pop~.,data=UN))
+boxCox(lm(Fertility~.,data=UN))
+```
+The terms which were considered to be transformed also are showing same result that we get at previous Question.
 
 8.  Fit the regression using the transformed variables.  Provide residual plots and added variables plots and comment.  If you feel that you need additional transformations of either the response or predictors, repeat any steps until you feel satisfied.
 
@@ -163,9 +168,11 @@ In both diagnostic plot and added variable plots, I cannot find severe violation
 abs.ti <- abs(rstudent(Cm))
 pval <- 2*(1-pt(abs.ti, Cm$df -1))
 min(pval) < .05/(Cm$df + ncol(UN))
+
+any(cooks.distance(Cm)>0.5)
 ```
 
-When executing outlier test with Bonferonni correction, I cannot find any outliers. Even though there are some suspects for outlier, their leverage changed after taking power transform.
+When executing outlier test with Bonferonni correction, I cannot find any outliers. Even though there are some suspects for outlier, their leverage changed after taking power transform. Test through cook's distance also show same result.
 
 
 ## Summary of Results
@@ -227,7 +234,7 @@ As we can see summary of final model, using predictors Change_add, logPPgdp, Fra
 answer: Added scatter plot draw linear relationship of model: $e_{Y}=\beta_{0}+\beta_{p}e_{x_{p}}$.
 $X^{*}$ is set of predictors except pth variable $x_{p}$
 where $e_{Y}$ is residual of fitted model on Y using $X^{*}$ and $e_{x_{p}}$ is residual of fitted model on $x_{p}$ using  $X^{*}$. 
-By simple regression estimate result, estimate for intttercept is 
+By simple regression estimate result, estimate for intercept is 
 $$
 \hat{\beta_{0}} = \overline{e_{Y}} - \hat{\beta_{p}} \overline{e_{x_{p}}}
 $$
@@ -235,8 +242,8 @@ and
 $$
 \overline{e_{Y}} = \frac{\sum_{i=1}^{n} e_{Y_{i}}}{n} = \frac{1}{n} \times 1_{n}^{T}(I-H^{*})Y
 $$
-where $H^{*}=X^{*}(X^{*}X^{*})^{-1}X^{*T}$.
-But $H^{*}$ is projection matrix of X which include one's column. According to fact that if $H^*$ is the projection matrix for $X$ which contains a column of ones, then $1_{n}^{T} (I - H) = 0$ or $(I - H) 1_{n} = 0$, $\overline{e_{Y}}$ = 0
+where $H^{*}=X^{*}(X^{*T}X^{*})^{-1}X^{*T}$.
+But $H^{*}$ is projection matrix of X which include one's column. According to fact that if $H$ is the projection matrix for $X$ which contains a column of ones, then $1_{n}^{T} (I - H) = 0$ or $(I - H) 1_{n} = 0$, $\overline{e_{Y}}$ = 0
 $$
 \overline{e_{x_{p}}} = \frac{\sum_{i=1}^{n} e_{X_{pi}}}{n} = \frac{1}{n} \times 1_{n}^{T}(I-H^{*})x_{p}
 $$
@@ -254,7 +261,7 @@ $$
 
 where $h_{ii}$ is the $i$th diagonal element of $H = X(X^TX)^{-1}X^T$ using direct multiplication and simplify in terms of_ $h_{ii}$.
 
-answer: If above statement is true then their multiplication will be $I$. Thus if  we multiply $( X^T_{(i)}X_{(i)})$ on both side then
+answer: If above statement is true then their multiplication with $( X^T_{(i)}X_{(i)})$ will be $I$. Thus if  we multiply $( X^T_{(i)}X_{(i)})$ on both side then
 $$
 I = ( X^T_{(i)}X_{(i)})[(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}]
 $$
@@ -296,7 +303,7 @@ Thus
 $$
 \begin{aligned}
 \hat{\beta}_{(i)} &= [(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}][X^TY-x_iy_i] \\
-&=[(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}]X^TY -  [(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}] \\
+&=[(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}]X^TY -  [(X^TX)^{-1} + \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}}{1 - h_{ii}}]x_iy_i \\
 &=(X^TX)^{-1}X^TY + \frac{(X^TX)^{-1}x_ix_i^T}{1-h_{ii}}(X^TX)^{-1}X^TY - (X^TX)^{-1}x_iy_i - \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}x_iy_i}{1-h_{ii}} \\
 &= \hat{\beta} + \frac{(X^TX)^{-1}x_ix_i^T}{1-h_{ii}} \hat{\beta} - (X^TX)^{-1}x_iy_i - \frac{(X^TX)^{-1}x_ix_i^T  (X^TX)^{-1}x_iy_i}{1-h_{ii}} \\
 &= \hat{\beta} + \frac{(X^TX)^{-1}x_i\hat{y_i}}{1-h_{ii}} -(X^TX)^{-1}x_iy_i - \frac{(X^TX)^{-1}x_iy_i}{1-h_{ii}}h_{ii} \\

@@ -28,6 +28,7 @@ data(Auto)
 outlook_auto <- summary(Auto)
 any(is.na(Auto))
 outlook_auto
+str(Auto)
 ```
   
 answer : no missing data in this data set  
