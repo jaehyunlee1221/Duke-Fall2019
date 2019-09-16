@@ -76,7 +76,7 @@ c(qgamma(0.05,125,14),qgamma(0.95,125,14))
 
 As we have learn in text book, posterior model for gamma prior with possion sampling model is gamma, i.e. conjugate prior.  
 
-when prior $p(\theta) \sim gamma(a,b)$ and sampling model$p(y\mid\theta) \sim poisson(\theta)$  
+when prior $p(\theta) \sim gamma(a,b)$ and sampling model $p(y\mid\theta) \sim poisson(\theta)$  
  
 which generate likelihood function $\prod_{i=1}^{n}p(y_i\mid\theta) \propto e^{-n\theta}\theta^{\sum y_i}$,
   
@@ -97,8 +97,8 @@ $Var(\theta_A \mid y_A) = \frac{a}{b^2} = \frac{237}{20^2} = 0.57$ $Var(\theta_B
 
 95% Quantile based confidence intervals are
 $\theta_A \in [\theta_{A_{0.025}},\theta_{A_{0.975}}] = 0.95$ and  
-$\theta_A \in [10.61,13.14] = 0.95$
-On the other hand  
+$\theta_A \in [10.61,13.14] = 0.95$.  
+On the other hand,  
 $\theta_B \in [7.65,10.28] = 0.95$
 
 #### b) 
@@ -122,10 +122,10 @@ ggplot(data=data,aes(x=n_0,y=E_th_B)) +
 
 
 Expectation of $\theta_A$ is as follow : $E(\theta_A \mid y_A) = 11.85$  
-And we can recognize that as n_0 gets larger, expectation of $\theta_B$ approachs to expectation of $\theta_A$. Thus prior belief based on larger prior sample size are necessary to be close to expecation of $\theta_A$
+And we can recognize that as n_0 gets larger, expectation of $\theta_B$ approachs to expectation of $\theta_A$. Thus prior belief which support that $\theta = 12$ based on larger prior sample size are necessary to be close to expecation of $\theta_A$
 
 #### c)
-Knowledge about $\theta_A$ should tell us something about population B, although sample are saying that they have different population property. Because before experiment we don't know anything about mice but A and B are related species. Moreover, independence is so strong assumption that we cannot easily use them. Thus it does not makes sense to have $p(\theta_A, \theta_B) = p(\theta_A) \times p(\theta_B)$
+Knowledge about $\theta_A$ should tell us something about population B prior to experiment, although sample are saying that they have different population property. Because before experiment, we don't know anything about mice but A and B are related species. Moreover, independence is so strong assumption that we cannot easily use them. Thus it does not makes sense to have $p(\theta_A, \theta_B) = p(\theta_A) \times p(\theta_B)$
 
 
 ## Excercise 3
@@ -142,19 +142,20 @@ Then posterior distributin for $\theta$
 $$
 p(\theta \mid y) \propto p(\theta)\theta^{2a}e^{-\theta^2 y^2}
 $$
-Thus conjugate prior should include terms $\theta e^{-\theta^2}$.  
-  
-To make problem simple, we can think that galenshore as prior distribution which has parameter $\alpha,\beta$
+Thus conjugate prior should include terms $\theta^{c_1} e^{-c_2\theta^2}$.
+
+To make problem simple, we can think that galenshore as prior distribution which has parameter $\alpha,\beta$. Then it includes $\theta^{c_1}e^{-c_2\theta^2}$ where $c_1 = 2\alpha-1, c_2 = \beta^2$.
+
 $$
 p(\theta)=\frac{2}{\Gamma(\alpha)} \beta^{2\alpha}\theta^{2\alpha-1}e^{-\beta^2 \theta^2}
 $$
 
 ```{r ex3_a}
-dgal <- function(y,beta,alpha){
-  2/gamma(alpha) * (beta)^(2*alpha) * y^(2*alpha-1) * exp(-(beta^2)*y^2)
+dgal <- function(theta,beta,alpha){
+  2/gamma(alpha) * (beta)^(2*alpha) * theta^(2*alpha-1) * exp(-(beta^2)*theta^2)
 }
 
-y <- seq(0,4,length.out = 1000)
+theta <- seq(0,4,length.out = 1000)
 beta <- 1:3
 alpha <- seq(0.5,1.5,length.out = 3)
 
@@ -162,7 +163,8 @@ par(mfrow=c(3,3))
 
 for(i in seq_along(beta)){
   for(j in seq_along(alpha)){
-    plot(y,dgal(y,i,j), xlab = "y",ylab=expression(paste("p(",theta,")")),
+    plot(theta,dgal(theta,i,j), xlab = expression(theta),
+         ylab=expression(paste("p(",theta,")")),
          main=paste(expression(beta),"=",i,expression(alpha),"=",j))
   }
 }
@@ -170,7 +172,8 @@ for(i in seq_along(beta)){
 
 #### b)
 $Y_1,\cdot\cdot Y_n \sim i.i.d \quad Galenshore(a,\theta)$. Find posterior using above prior
-assume prior $p(\theta) \sim Galenshore(\alpha,\beta)$
+assume prior $p(\theta) \sim Galenshore(\alpha,\beta)$  
+
 Since Y are i.i.d, likelihood function for Y is
 $$
 \begin{aligned}
@@ -207,11 +210,12 @@ Through above equation of relative probibility function, we can recognize that $
 
 #### d)
 Determine $E[\theta \mid y_1 \cdot\cdot\cdot y_n]$
-According to part b), we have shown that $p(\theta) \sim Galenshore(\alpha+na,\sqrt{\beta^2+\sum y_i^2}$.
+  
+According to part b), we have shown that $p(\theta) \sim Galenshore(\alpha+na,\sqrt{\beta^2+\sum y_i^2})$.
 And we know that $E[y] = \frac{\Gamma(a+1/2)}{\theta \Gamma(a)}$ when $y \sim Galenshore(a,\theta)$
 Thus 
 $$
-E[\theta \mid y_1,\cdot\cdot\cdot,y_n] = \frac{\Gamma(\alpha + na+1/2)}{\Gamma(\alpha+na)\sqrt(\beta^2+\sum_{i=1}^{n} y_i^2)}
+E[\theta \mid y_1,\cdot\cdot\cdot,y_n] = \frac{\Gamma(\alpha + na+1/2)}{\Gamma(\alpha+na)\sqrt{(\beta^2+\sum_{i=1}^{n} y_i^2)}}
 $$
 
 #### e)
@@ -236,10 +240,13 @@ $$
 ## Exercise 4
 
 Posterior comparison: 
+  
 county1 : sample = 100, $\sum y_{1i} = 57$
+  
 county2 : sample = 50, $\sum y_{2i} = 30$
 
 According to text book, when prior distribution is uniform $p(\theta) = 1$ and sampling model $p(y_i \mid \theta) = \theta^{y_i} (1-\theta)^{1-y_i}$,
+  
 posterior distribution $p(\theta \mid y_1 \cdot\cdot\cdot y_n) \propto \theta^{\sum_{i=1}^{n}y_i} (1-\theta)^{\sum_{i=1}^n}y_i \sim beta(1+\sum_{i=1}^n y_i,1+n-\sum_{i=1}^n y_i)$
   
 Thus
@@ -294,7 +301,7 @@ for(i in 1:100){
 plot(n_0, result, type='l')
 ```
 
-probability of the event {$\theta_B < \theta_A$} is slowly moving to 0.5 as n_0 gets bigger. That is sample size which support that $\theta_B$ is 12 gets bigger, the probability of event gets smaller. However, convergence rate is so slow that even prior sample size is 100, it is still larger than 0.6. This situation occurred because of data which support another result.
+probability of the event {$\theta_B < \theta_A$} is slowly moving to 0.5 as $n_0$ gets bigger. That is sample size which support that $\theta_B$ is 12 gets bigger, the probability of event gets smaller. However, convergence rate is so slow that even prior sample size is 100, it is still larger than 0.6. This situation occurred because of data which support another result.
 
 #### c)
 repeat a),b) with event{$\tilde{Y}_B< \tilde{Y}_A$} where they are sample from the posterior predictive model
@@ -335,4 +342,4 @@ for (i in 1:100){
 plot(n_0, result, type='l')
 
 ```
-Even though probability of event { $\tilde{y}_B<\tilde{y}_A$ } is smaller than {$\theta_B < \theta_A$}, it is still usually larger than 0.5 at small prior sample size n_0. However, it significantly more sensitive to change of prior sample size and converges fastly to 0.5.
+Even though probability of event { $\tilde{y}_B<\tilde{y}_A$ } is smaller than {$\theta_B < \theta_A$}, it is still usually larger than 0.5 at small prior sample size n_0. However, it significantly more sensitive to change of prior sample size and converges fastly to 0.5. And it even shows smaller probability than 0.5. Thus we can conclude that predictive probability are more sensitive to prior information than posterior distribution of $\theta$
