@@ -24,7 +24,7 @@ http://www.icpsr.umich.edu/cgi-bin/file?comp=none&study=8475&ds=1&file_id=119604
 ```{r data, include=FALSE}
 # Data are also at http://www.stat.columbia.edu/~gelman/arm/examples/nes
 
-nes <- read.dta("http://www.stat.columbia.edu/~gelman/arm/examples/nes/nes5200_processed_voters_realideo.dta",
+nes <- read.dta("nes5200_processed_voters_realideo.dta",
                    convert.factors=F)
 
 # the following provide some details about variables, but data set is not well documented
@@ -183,6 +183,8 @@ When we see the result of chisq test of residual deviance, it shows that it is v
 
 Diagnostic plot of this model does not provide adequate assessment about model at all. For normal QQ plot, it is not needed in this model, because response variable is binary data. Scale-location plot is also not useful because variance of binary data varies according to $\hat{\pi}$. Residual vs fitted plot only shows 2 distinct lines which consist of cases when $y_i = 1$ and $y_i = 0$. 
 
+\newpage
+
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 
 ```{r create new data set}
@@ -222,7 +224,9 @@ kable(OR_ci, digits = c(4,4,4),
 ```
 
 
-8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
+8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4. 
+
+You can find our plot at Figure 3
 
 ```{r CI over time, fig.height=4, fig.width=6, fig.cap="Coefficient of income (on a 1–5 scale) with 95% confidence interval in logistic regressions predicting Republican preference for president, as estimated separately from surveys from 1952 to 2000."}
 ggplot(data = OR_ci, mapping = aes(x = seq(1952,2000,4), y = fitted)) +
@@ -369,22 +373,27 @@ kable(summary(glm_fit.4)$coef,digits=4,
 ```
 
 ```{r analysis of deviance for new model}
-kable(anova(glm_fit.4, test = "Chisq"), caption = "Analysis of deviance for the model")
+kable(anova(glm_fit.4, test = "Chisq"), caption = "Analysis of deviance for the model", digits = 4)
 ```
 
 Since Anova table indicates that 2-way interaction terms of income with educ1, partyid3 with ideo are insignificant, we decide to refit the model excluding those terms.
 
 ```{r refit the model}
-glm_fit.5 <- glm(vote ~ factor(income) + factor(educ1) + factor(partyid3) + factor(ideo) + factor(gender)*factor(race), data = newnes_1992, family = binomial(link = "logit"))
+glm_fit.5 <- glm(vote ~ factor(income) + factor(educ1) + factor(partyid3) + 
+                   factor(ideo) + factor(gender)*factor(race), 
+                 data = newnes_1992, family = binomial(link = "logit"))
 
-kable(anova(glm_fit.5, test = "Chisq"), caption = "Analysis of deviance for the model")
+kable(anova(glm_fit.5, test = "Chisq"), caption = "Analysis of deviance for the model",digits=4)
 ```
+
 Then we use ANOVA again and found that we need to remove "educ1" as well, because its p-value is too large and  `glm_fit.6` is our final model, which are shown in the chunk below.
 
 ```{r choose the model with only significant variables}
-glm_fit.6 <- glm(vote ~ factor(income) + factor(partyid3) + factor(ideo) + factor(gender)*factor(race), data = newnes_1992, family = binomial(link = "logit"))
+glm_fit.6 <- glm(vote ~ factor(income) + factor(partyid3) + factor(ideo) +
+                   factor(gender)*factor(race), data = newnes_1992, 
+                 family = binomial(link = "logit"))
 
-kable(anova(glm_fit.6, test = "Chisq"), caption = "Analysis of deviance for the model")
+kable(anova(glm_fit.6, test = "Chisq"), caption = "Analysis of deviance for the model",digits=4)
 ```
 
 Now we have model which include only significant variables.
@@ -431,12 +440,14 @@ newnes_1992_temp <- newnes_1992 %>%
   filter(!is.na(perfin)) %>%
   filter(!is.na(presapprov))
 
-glm_fit.8 <- glm(vote ~ factor(income) + factor(partyid3) + factor(ideo) + factor(gender)*factor(race) + factor(religion) + factor(perfin) + factor(presapprov), data = newnes_1992_temp, family = binomial(link = "logit"))
-anova(glm_fit.8, test = "Chisq")
+glm_fit.8 <- glm(vote ~ factor(income) + factor(partyid3) + factor(ideo) 
+                 +factor(gender)*factor(race) + factor(religion) + factor(perfin) 
+                 +factor(presapprov), data = newnes_1992_temp, family = binomial(link = "logit"))
+kable(anova(glm_fit.8, test = "Chisq"),digits=4,caption="Analysis of deviance for the model")
 ```
 
-Then we use ANOVA to check our new model and found these predictors are all signifiant.
-
+Then we used ANOVA to check our new model and found these predictors are all signifiant.
+It means that by adding new variables, we significantly improve our model.
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.
 
@@ -456,31 +467,37 @@ newnes_1992_fin <- newnes_1992 %>%
 ```
 
 ```{r model fitting}
-glm_fit.6 <- glm(vote ~ income + partyid3 + ideo + gender*race, data = newnes_1992_fin, family = binomial(link = "logit"))
-glm_fit.8 <- glm(vote ~ income + partyid3 + ideo + gender*race + religion + perfin + presapprov, data = newnes_1992_fin, family = binomial(link = "logit"))
+glm_fit.6 <- glm(vote ~ income + partyid3 + ideo + gender*race, 
+                 data = newnes_1992_fin, family = binomial(link = "logit"))
+glm_fit.8 <- glm(vote ~ income + partyid3 + ideo + gender*race + religion + perfin + 
+                   presapprov, data = newnes_1992_fin, family = binomial(link = "logit"))
 ```
 
-```{r coefficient table for two models, warning=FALSE}
+```{r coefficient table for two models, warning=FALSE, message=FALSE}
 old <- glm_fit.6$coefficients
 new <- glm_fit.8$coefficients
 old_ci <- data.frame(cbind(old,confint(glm_fit.6)),model = "old", names = names(old))
 new_ci <- data.frame(cbind(new,confint(glm_fit.8)),model = "new", names = names(new))
 colnames(old_ci) <- c("coefficient","2.5%","97.5%","model","name")
 colnames(new_ci) <- c("coefficient","2.5%","97.5%","model","name")
-kable(old_ci,digits = 4,caption = "coefficient of variables table for old model")
-kable(new_ci,digits = 4,caption = "coefficient of variables table for new model")
+kable(old_ci,digits = 4,
+      caption = "coefficient of variables and their confidence interval table for old model")
+kable(new_ci,digits = 4,
+      caption = "coefficient of variables and their confidence interval table for new model")
 ```
+
 
 ```{r coefficient stability checking, fig.cap="Coefficient comparison plot for each variables. It shows both point and interval estimates for variables.", fig.width=8, fig.height=10}
 coeff_table <- rbind(old_ci,new_ci)
 coeff_table <- na.omit(coeff_table)
-ggplot(data = coeff_table, mapping = aes(x=model, y=as.numeric(coefficient)),labs(x="old & new models",y="coefficients")) +
+ggplot(data = coeff_table, mapping = aes(x=model, y=as.numeric(coefficient)),
+       labs(x="old & new models",y="coefficients")) +
   geom_point() +
   geom_errorbar(aes(ymin = coeff_table[,2],ymax = coeff_table[,3])) +
   facet_wrap(~name,scales = "free")
 ```
 
-As we can see in tables and plots above, some variables' coefficients are showing instability. For instance, CI for partyid3, race, gender and their interaction terms does not converge and show too large error compared to their estimated values. Some variables even change their sign after new variables are added in model.
+As we can see in tables and plots above, some variables' coefficients are showing instability because they have too large standard error compared to its coefficient. For instance, CI for partyid3, race, gender and their interaction terms does not converge and show too large error compared to their estimated values. Some variables even change their sign after new variables are added in model.
 
 ```{r indicator of identifiability}
 index_old <- apply(old_ci,1,function(x)sum(is.na(x)))>0
@@ -491,7 +508,7 @@ indicator <- list(old = indicator_old, new = indicator_new)
 indicator
 ```
 
-Above variables are showing the problem of identifiability which have too large standard error for their coefficient relative to thier estimated value.
+Above variables are showing the problem of identifiability, because their confidence intervaldoes not converge and are showing NA. We cannot estimate it.
 
 ```{r binned residual plot for both model to compare their fit, fig.cap="avergae residual of model versus their fitted value which shows how well model is fitted.",fig.width=8, fig.height=10}
 par(mfrow=c(2,1))
@@ -499,18 +516,22 @@ binnedplot(glm_fit.6$fitted.values,glm_fit.6$residuals, main = "Old Model Binned
 binnedplot(glm_fit.8$fitted.values,glm_fit.8$residuals, main = "New Model Binned plot")
 ```
 
+From our above binned plots, we couldn't see any severe violation of our model. So it is a good fit.
+
 ```{r Deviance comparison}
-kable(anova(glm_fit.6,glm_fit.8,test = "Chisq"), digit = 4, caption = "table shows we need to choose new model")
+kable(anova(glm_fit.6,glm_fit.8,test = "Chisq"), digit = 4, 
+      caption = "table shows we need to choose new model")
 ```
+
+Through Anova table, our new model which added new variables is significantly better than old model. Because we check that it has much smaller deviance by doing chisq test. 
 
 
 15.  Compute the error rate of your model (see GH page 99) and compare it to the error rate of the null model.  We can define a function for the error rate as:
-```{r error.rate, include=FALSE}
+```{r error.rate}
 error.rate = function(pred, true) {
   mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
 }
 glm_null <- glm(vote ~ 1, data = newnes_1992_fin, family = binomial(link = "logit"))
-summary(glm_null)
 glm_fin <- glm(vote ~ income + partyid3 + ideo + gender*race + religion + perfin + presapprov, data = newnes_1992_fin, family = binomial(link = "logit"))
 null.pred <- predict(glm_null)
 fin.pred <- predict(glm_fin)
@@ -520,13 +541,12 @@ error = data.frame(null = null.error,fin = fin.error)
 kable(error,digits = 3, caption = "error rate reduce dramatically when we use fitted value for our model as prediction")
 ```
 
+our model's prediction is much more precise than null model.
+
+16.  Provide one to two paragraphs summarizing your findings.  Provide a neatly formatted table of odds ratios and 95\% confidence intervals for each predictor, and in the text interprete key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.   Comment on which variables had missing data, suggesting possible reasons why they may be missing and discuss whether you think that this may impact your analysis. Discuss any limitations of the models and its generalizability.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.  
 
 
-16.  Provide one to two paragraphs summarizing your findings.  Provide a neatly formatted table of odds ratiosand 95\% confidence intervals for each predictor, and in the text interprete key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.   Comment on which variables had missing data, suggesting possible reasons why they may be missing and discuss whether you think that this may impact your analysis.   Discuss any limitations of the models and its generalizability.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.  
-
-
-Our model evaluated the factors that influnce people voting for Republican in 1992 presidential election. We examined income, political ideology, gender, race, party choice, religion, perfin and presapprov as well as some potential interactin between these variables. We found that political party was significantly associated with a Republican vote:republicans are more likly to vote for Bush than other parties. In addition, political ideology was also assiciated with voting. Moderated were 1 to 2.4 times more likely to vote for Bush than Liberals. When political party affiliation and ideology are held constant, we found religion is another factor to influence people's voting. People from Religion2 are 9 times more likely to vote for Bush than people from Religion3 and 3 three times more likely to vote for Bush than people from Religion4. Apart from that, we also found black and white male like Bush better than native american and hispanic male.    
-
+Our model evaluated the factors that influnce people voting for Republican in 1992 presidential election. We examined income, political ideology, gender, race, party choice, religion, perfin and presapprov as well as some potential interaction between these variables. We found that political party was significantly associated with a Republican vote:republicans are more likely to vote for Bush than other parties. i.e. odds of voting for Bush is larger than other party. In addition, political ideology was also assiciated with voting. Odds of voting for Bush in Moderated was 1 to 2.4 times larger than odds of voting for Bush in Liberals. When political party affiliation and ideology are held constant, we found religion is another factor to influence people's voting. Odds of voting for Bush in people from Religion2 is 9 times larger than people from Religion3 and 3 three times larger than people from Religion4. Apart from that, we also found black and white male like Bush better than native american and hispanic male.  Also, people with less income but not the least income have the highest possibility to vote for Republican, which is two times more than the richest people. Another thing needs to be mentioned is that there are some variables in our model which cannot be estimated because of the problem called identifiability which occurred from large changing rate and that is one of the limitation of our model. 
 
 Most missing data occured in variables related to political parties and ideology, for example, parents' parties and ideology feel. We also have two columns of NA under the variable regis and icpsr_cty, because people didn't register and didn't agree with enthics were not eligible to vote. As for other variables with missing data, it might because data were collected based on a survey about people's political reference and other personal information. Some people were not sure which ideology or political parties were applied to them and some people didn't know their parents' parties, so they skipped these questions. If these were the cases, these missing data might cause a lower level of political knowledge and biased our analysis. Because when a voter is not sure about his/her political preference, he/she has higher leverege on choosing Republican than other voters.
 This might influence our model's generalizability as well. Therfore, we may want to add a another variable indicating voter's political knowledge or sensitivity. Because this report are prepared for all US citizens and people with less political knowledge just a subset of it, which can't represent all Americans.
@@ -534,9 +554,10 @@ This might influence our model's generalizability as well. Therfore, we may want
 
 ```{r,message=FALSE, warning=FALSE}
 library(knitr)
+options(digits = 4)
 odds.ratio <- round(exp(glm_fit.8$coefficients),4)
 confit<- round(exp(confint(glm_fit.8)),4)
-format(odds.ratio,confit)
 df<-data.frame(odds.ratio,confit)
-kable(df)
+kable(df,col.names = c("odds ratio", "2.5%", "97.5%"), 
+      caption = "Odds ratio and confidence interval for each predictor")
 ```
