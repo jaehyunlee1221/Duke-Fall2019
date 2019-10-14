@@ -90,6 +90,7 @@ for(i in 1:length(k0)){
 result <- data.frame(cbind(k0,p))
 ggplot(result, mapping = aes(x= k0, y=p)) +
   geom_line() +
+  geom_point()
   labs(title = "p(theta_B > theta_A) vs k0")
 ```
 
@@ -97,21 +98,28 @@ When prior sample size $k_0 = v_0$ is small, observations which support $\theta_
 
 #### b)
 
-```{r stan}
+```{r stan, warning=FALSE, message=FALSE}
 set.seed(1000)
 n <- 16
 k0 <- 2^seq(0,8,1)
 p2 <- rep(NA,length(k0))
-y_A <- rnorm(n = n, 75.2, 7.3)
-y_B <- rnorm(n = n, 77.5, 8.1)
-X <- MASS::mvrnorm(n = n, mu = c(75.2, 77.5), Sigma = matrix(c(7.3^2, 0, 0, 8.1^2), nrow = 2))
+y_A <- y_B <- 10
+while(!(near(mean(y_A),75.2,tol = 0.1) & near(sd(y_A),7.3,tol = 0.1))){
+  y_A <- rnorm(n = n, 75.2, 7.3)
+}
+while(!(near(mean(y_B),77.5,tol = 0.1) & near(sd(y_B),8.1,tol = 0.1))){
+  y_B <- rnorm(n = n, 77.5, 8.1)
+}
+c(mean(y_A),mean(y_B))
+c(sd(y_A),sd(y_B))
+mystan <- rstan::stan_model("hmc_norm_example.stan")
 for(i in 1:length(k0)){
-  stan_res_A <- rstan::stan("hmc_norm_example.stan", data = list(X = y_A, 
+  stan_res_A <- rstan::sampling(mystan, data = list(X = y_A, 
                                                              N = n, 
                                                              Sigma = 7.3, K = k0[i]),
                         chains = 1, iter = 600, warmup = 100, verbose = F, refresh = 0) %>%
             rstan::extract()
-  stan_res_B <- rstan::stan("hmc_norm_example.stan", data = list(X = y_B, 
+  stan_res_B <- rstan::sampling(mystan, data = list(X = y_B, 
                                                              N = n, 
                                                              Sigma =8.1, K = k0[i]),
                         chains = 1, iter = 600, warmup = 100, verbose = F, refresh = 0) %>%
@@ -122,10 +130,11 @@ for(i in 1:length(k0)){
 result <- data.frame(cbind(k0,p2))
 ggplot(result, mapping = aes(x= k0, y=p2)) +
   geom_line() +
+  geom_point() +
   labs(title = "p(theta_B > theta_A) vs k0 via stan")
 
 ```
-Even though, it has not exactly same shape with above result, it also decreases from over 0.7 to 0.5
+Even though, it has not exactly same shape with above result, it also decreases from over 0.8 to 0.5
 
 
 
